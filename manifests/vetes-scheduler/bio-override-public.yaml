@@ -1,0 +1,30 @@
+releases:
+- name: vetes-scheduler
+  namespace: {{ .Values.namespace }}
+  disableValidationOnInstall: true
+  installed: true
+  chart: {{ .Values.modulePath }}/vetes-scheduler
+  wait: false
+  values:
+  - platformConfig:
+      imageRegistry: {{ .Values.registryDomain }}
+      imageRepositoryRelease: {{ .Values.registryRepository }}
+    replicaCount: {{ .Values.scheduler.replicaCount }}
+    resources:
+      requests:
+        cpu: {{ .Values.scheduler.resources.requests.cpu }}
+        memory: {{ .Values.scheduler.resources.requests.memory }}
+      limits:
+        cpu: {{ .Values.scheduler.resources.limits.cpu }}
+        memory: {{ .Values.scheduler.resources.limits.memory }}
+    prometheus:
+      labels:
+        volcengine.vmp: "true"
+    scheduler:
+      schedulePeriod: {{ .Values.scheduler.schedulePeriod }}
+      clusterNotReadyTimeout: {{ .Values.scheduler.clusterNotReadyTimeout }}
+      cache:
+        syncPeriod: {{ .Values.scheduler.cache.syncPeriod }}
+      controller:
+        period: {{ .Values.scheduler.controller.period }}
+        clusterRescheduleTimeout: {{ .Values.scheduler.controller.clusterRescheduleTimeout }}

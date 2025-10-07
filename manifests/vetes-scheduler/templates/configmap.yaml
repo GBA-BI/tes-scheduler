@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "vetes-scheduler.fullname" . }}
+  labels:
+    {{- include "vetes-scheduler.labels" . | nindent 4 }}
+data:
+  config.yaml: |
+    leaderElection:
+      enable: true
+      namespace: {{ .Release.Namespace }}
+      name: {{ include "vetes-scheduler.fullname" . }}
+    vetesClient:
+      endpoint: {{ .Values.vetesClient.endpoint }}
+      timeout: {{ .Values.vetesClient.timeout }}
+    server:
+      port: {{ .Values.service.port | int }}
+    log:
+      level: {{ .Values.log.level }}
+      output-path: {{ .Values.log.outputPath }}
+    scheduler:
+      schedulePeriod: {{ .Values.scheduler.schedulePeriod }}
+      clusterNotReadyTimeout: {{ .Values.scheduler.clusterNotReadyTimeout }}
+      cache:
+        syncPeriod: {{ .Values.scheduler.cache.syncPeriod }}
+      controller:
+        period: {{ .Values.scheduler.controller.period }}
+        clusterRescheduleTimeout: {{ .Values.scheduler.controller.clusterRescheduleTimeout }}

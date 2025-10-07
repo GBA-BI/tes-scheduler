@@ -1,0 +1,31 @@
+releases:
+- name: vetes-scheduler
+  namespace: {{ .Values.namespace }}
+  disableValidationOnInstall: true
+  installed: true
+  chart: {{ .Values.modulePath }}/vetes-scheduler
+  wait: false
+  values:
+  - platformConfig:
+      imageRegistry: {{ .Values.registryDomain }}
+      imageRepositoryRelease: {{ .Values.registryRepository }}
+      imagePullSecret: {{ .Values.registrySecret }}
+    replicaCount: {{ default "2" .Values.customconfig.vetes.scheduler.replicaCount }}
+    resources:
+      requests:
+        cpu: {{ .Values.customconfig.vetes.scheduler.resources.requests.cpu }}
+        memory: {{ .Values.customconfig.vetes.scheduler.resources.requests.memory }}
+      limits:
+        cpu: {{ .Values.customconfig.vetes.scheduler.resources.limits.cpu }}
+        memory: {{ .Values.customconfig.vetes.scheduler.resources.limits.memory }}
+    prometheus:
+      labels:
+        bio2s-monitor: compute
+    scheduler:
+      schedulePeriod: {{ .Values.customconfig.vetes.scheduler.schedulePeriod }}
+      clusterNotReadyTimeout: {{ .Values.customconfig.vetes.scheduler.clusterNotReadyTimeout }}
+      cache:
+        syncPeriod: {{ .Values.customconfig.vetes.scheduler.cache.syncPeriod }}
+      controller:
+        period: {{ .Values.customconfig.vetes.scheduler.controller.period }}
+        clusterRescheduleTimeout: {{ .Values.customconfig.vetes.scheduler.controller.clusterRescheduleTimeout }}

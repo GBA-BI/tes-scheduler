@@ -1,0 +1,12 @@
+codecov:                       # 完整文档：https://bytedance.feishu.cn/wiki/wikcnvSDfFHKjDN5D0A0ufpvDnc
+  status:
+    project:                   # 全量代码
+      default:                 # 对于整个项目，每次提交时都与目标分支进行覆盖率比较，最多允许少于目标分支覆盖率 1%
+        threshold: 1%
+        base: "change"
+        if_not_found: error
+    diff:                      # 增量代码
+      default:                 # 每次提交的增量代码，覆盖率不少于 x% - x%
+        minimum_coverage: 1%
+        threshold: 1%
+        if_not_found: error

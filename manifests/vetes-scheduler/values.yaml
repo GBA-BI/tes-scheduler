@@ -1,0 +1,100 @@
+## platformConfig contains information about the environment on which the Chart is being installed
+## These values are expected be updated during the platform installation stage
+platformConfig:
+  ## Container registry for all images involved in the chart
+  imageRegistry: hub.byted.org
+  ## Container repository for platform components
+  imageRepositoryRelease: infcprelease
+  ## Platform-wide image pull policy
+  imagePullPolicy: Always
+  ## Image pull secret names
+  imagePullSecret: []
+
+labels: {}
+
+podLabels: {}
+
+podAnnotations: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+image:
+  name: vetes-scheduler
+  tag: v1.0.0
+
+replicaCount: 2
+
+priorityClassName: ""
+
+resources:
+  limits:
+    cpu: 1
+    memory: 2Gi
+  requests:
+    cpu: 1
+    memory: 2Gi
+
+securityContext:
+  enabled: true
+  runAsUser: 65534  # nobody
+  runAsGroup: 65534 # nogroup
+  fsGroup: 65534    # nogroup
+
+service:
+  type: ClusterIP
+  port: 8080
+  annotations: {}
+  labels: {}
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: ""
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+hardAntiAffinity: false
+
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 60
+  periodSeconds: 10
+  timeoutSeconds: 10
+  failureThreshold: 3
+  successThreshold: 1
+
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 10
+  failureThreshold: 3
+  successThreshold: 1
+
+prometheus:
+  labels: {}
+  interval: 15s
+  scrapeTimeout: 10s
+
+log:
+  level: info
+  outputPath: app.log
+
+vetesClient:
+  endpoint: http://vetes-api:8080
+  timeout: 10s
+
+scheduler:
+  schedulePeriod: 30s
+  clusterNotReadyTimeout: 5m
+  cache:
+    syncPeriod: 15s
+  controller:
+    period: 30s
+    clusterRescheduleTimeout: 20m

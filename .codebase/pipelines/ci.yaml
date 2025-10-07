@@ -1,0 +1,22 @@
+name: vetes-scheduler
+trigger: [change, push]
+jobs:
+  check:
+    name: check project
+    image: hub.byted.org/infcplibrary/golang:1.20.5-bullseye-auth
+    envs:
+      GOPATH: /go
+      SHELLOPTS: errexit
+    steps:
+      - name: Test
+        commands:
+          - make test
+          - go vet -n ./... 2> govet.out
+      - name: Lint
+        commands:
+          - make lint
+      - name: Analyse Coverage
+        uses: actions/codecov@v1
+        inputs:
+          file: "coverage.out"
+          fail_ci_if_error: true
